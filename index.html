@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LegacyFabric Versions</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/gradle.min.js"></script>
+
+    <script src="./index.js" defer></script>
+</head>
+
+<body>
+    <h1>Legacy-Fabric Latest Versions</h1>
+
+    <img alt="Legacy-Fabric Discord Server" src="https://img.shields.io/discord/679635419045822474.svg?label=discord">
+    <img alt="Legacy-Fabric Yarn GitHub stars" src="https://img.shields.io/github/stars/Legacy-Fabric/yarn.svg?label=Yarn&style=social">
+    <img alt="Legacy-Fabric API GitHub stars" src="https://img.shields.io/github/stars/Legacy-Fabric/fabric.svg?label=Fabric&style=social">
+
+    <p>Minecraft Version:
+        <select name="versions" id="versions"></select>
+    </p>
+
+    <h3>build.gradle</h3>
+    <div name="code">
+        <pre><code class="gradle" id="build-gradle-code"></code></pre>
+    </div>
+
+    <h3>gradle.properties</h3>
+    <div name="code">
+        <pre><code class="properties" id="gradle-properties-code"></code></pre>
+    </div>
+
+    <br>
+    <hr>
+
+    <h2>Mappings Migration</h2>
+    <p>Mappings can be auto updated by using the following command. See the <a
+            href="https://fabricmc.net/wiki/tutorial:migratemappings">wiki page</a> for more help.</p>
+    <div name="code">
+        <pre><code class="bash">gradlew migrateMappings --mappings "{yarn_version}"</code></pre>
+    </div>
+</body>
+
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        document.getElementById('build-gradle-code').innerHTML = [
+            'dependencies {',
+            '    minecraft "com.mojang:minecraft:{minecraft_version}"',
+            '    mappings "net.fabricmc:yarn:{yarn_version}:v2"',
+            '    modImplementation "net.fabricmc:fabric-loader:{loader_version}"',
+            '',
+            '    // LegacyFabric API',
+            '    modImplementation "{fabric_maven}{fabric_version}"',
+            '}',
+        ].join('\n');
+        document.getElementById('gradle-properties-code').innerHTML = [
+            'minecraft_version={minecraft_version}',
+            'yarn_mappings={yarn_version}',
+            'loader_version={loader_version}',
+            '',
+            '#Fabric api',
+            'fabric_version={fabric_version}',
+        ].join('\n');
+        document.querySelectorAll('pre code').forEach((block) => {
+            hljs.highlightBlock(block);
+        });
+    });
+</script>
+
+</html>
