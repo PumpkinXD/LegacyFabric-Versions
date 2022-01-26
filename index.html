@@ -10,15 +10,22 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/gradle.min.js"></script>
 
+    <link rel="stylesheet" href="./index.css">
     <script src="./index.js" defer></script>
 </head>
 
 <body>
-    <h1>Legacy-Fabric Latest Versions</h1>
+    <h1 id="title">Legacy-Fabric Latest Versions</h1>
 
-    <img alt="Legacy-Fabric Discord Server" src="https://img.shields.io/discord/679635419045822474.svg?label=discord">
-    <img alt="Legacy-Fabric Yarn GitHub stars" src="https://img.shields.io/github/stars/Legacy-Fabric/yarn.svg?label=Yarn&style=social">
-    <img alt="Legacy-Fabric API GitHub stars" src="https://img.shields.io/github/stars/Legacy-Fabric/fabric.svg?label=Fabric&style=social">
+    <a href="https://legacyfabric.net/discord" target="_blank" rel="noopener noreferrer">
+        <img alt="Legacy-Fabric Discord Server" src="https://img.shields.io/discord/679635419045822474.svg?label=discord">
+    </a>
+    <a href="https://github.com/Legacy-Fabric/yarn" target="_blank" rel="noopener noreferrer">
+        <img alt="Legacy-Fabric Yarn GitHub stars" src="https://img.shields.io/github/stars/Legacy-Fabric/yarn.svg?label=Yarn&style=social">
+    </a>
+    <a href="https://github.com/Legacy-Fabric/fabric" target="_blank" rel="noopener noreferrer">
+        <img alt="Legacy-Fabric API GitHub stars" src="https://img.shields.io/github/stars/Legacy-Fabric/fabric.svg?label=Fabric&style=social">
+    </a>
 
     <p>Minecraft Version:
         <select name="versions" id="versions"></select>
@@ -38,8 +45,8 @@
     <hr>
 
     <h2>Mappings Migration</h2>
-    <p>Mappings can be auto updated by using the following command. See the <a
-            href="https://fabricmc.net/wiki/tutorial:migratemappings">wiki page</a> for more help.</p>
+    <p>Mappings can be auto updated by using the following command.
+        See the <a href="https://fabricmc.net/wiki/tutorial:migratemappings">wiki page</a> for more help.</p>
     <div name="code">
         <pre><code class="bash">gradlew migrateMappings --mappings "{yarn_version}"</code></pre>
     </div>

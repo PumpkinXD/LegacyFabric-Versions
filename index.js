@@ -31,7 +31,7 @@ function initVersionSelect() {
     }
 
     versionSelection.onchange = () => {
-        var url = new URL(window.location.href);
+        let url = new URL(window.location.href);
         url.searchParams.set('version', versionSelection.value);
         window.location.href = url;
     };
@@ -46,27 +46,24 @@ async function loadData() {
      * }[]} */
     let data = await getJSON(`https://meta.legacyfabric.net/v1/versions/loader/${version}`);
 
-    var meta = data[0];
-    var codeBlocks = document.getElementsByName('code');
+    let latest = data[0];
+    let codeBlocks = document.getElementsByName('code');
     for (let block of codeBlocks) {
-        block.innerHTML = block.innerHTML.replaceAll('{minecraft_version}', meta.mappings.gameVersion);
-        block.innerHTML = block.innerHTML.replaceAll('{yarn_version}', meta.mappings.version);
-        block.innerHTML = block.innerHTML.replaceAll('{loader_version}', meta.loader.version);
+        block.innerHTML = block.innerHTML.replaceAll('{minecraft_version}', latest.mappings.gameVersion);
+        block.innerHTML = block.innerHTML.replaceAll('{yarn_version}', latest.mappings.version);
+        block.innerHTML = block.innerHTML.replaceAll('{loader_version}', latest.loader.version);
     }
 
-    /* // TODO: fix api version
-    var versionUrl = 'https://maven.legacyfabric.net/net/legacyfabric/legacy-fabric-api/legacy-fabric-api/maven-metadata.xml';
+    const versionUrl = 'https://maven.legacyfabric.net/net/legacyfabric/legacy-fabric-api/legacy-fabric-api/maven-metadata.xml';
+    const mavenStr = 'net.legacyfabric.legacy-fabric-api:legacy-fabric-api:';
 
-    let daata = await getXML(versionUrl);
-    console.log(daata);
+    // TODO: fix api version
+    //let apiData = await getXML(versionUrl);
 
-    findVersion(versionUrl, "", (version) => {
-        var codeBlocks = document.getElementsByName('code');
-        for (let block of codeBlocks) {
-            block.innerHTML = block.innerHTML.replaceAll('{fabric_version}', version);
-            block.innerHTML = block.innerHTML.replaceAll('{fabric_maven}', mavenStr);
-        }
-    });*/
+    for (let block of codeBlocks) {
+        //block.innerHTML = block.innerHTML.replaceAll('{fabric_version}', version);
+        block.innerHTML = block.innerHTML.replaceAll('{fabric_maven}', mavenStr);
+    }
 }
 
 /**
