@@ -7,11 +7,12 @@ const versionSelection = document.getElementById('versions');
 var mcVersions = [];
 
 (async () => {
-    //Taken from https://stackoverflow.com/questions/1144783/how-to-replace-all-occurrences-of-a-string-in-javascript
+    // taken from https://stackoverflow.com/a/1144788
     String.prototype.replaceAll = function (search, replacement) {
         return this.replace(new RegExp(search, 'g'), replacement);
     };
 
+    console.log('Loading game version data...');
     mcVersions = await getJSON('https://meta.legacyfabric.net/v1/versions/game');
     await initVersionSelect();
     await loadData();
@@ -40,6 +41,7 @@ function initVersionSelect() {
 async function loadData() {
     const mcVersion = versionSelection.value;
 
+    console.log('Loading loader version data...');
     /** @type {{
      * loader: {name: string, separator: string, build: number, maven: string, version: string, stable: boolean},
      * mappings: {gameVersion: string, name: string, separator: string, build: number, maven: string, version: string, stable: boolean}
@@ -57,6 +59,7 @@ async function loadData() {
     const versionUrl = 'https://maven.legacyfabric.net/net/legacyfabric/legacy-fabric-api/legacy-fabric-api/maven-metadata.xml';
     const mavenStr = 'net.legacyfabric.legacy-fabric-api:legacy-fabric-api:';
 
+    console.log('Loading api version data...');
     let apiData = await getXML(versionUrl);
     let apiVersions = Object.entries(apiData.querySelectorAll('version'))
         .map(([key, value]) => value.innerHTML)
