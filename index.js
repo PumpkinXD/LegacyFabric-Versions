@@ -38,13 +38,13 @@ function initVersionSelect() {
 }
 
 async function loadData() {
-    const version = versionSelection.value;
+    const mcVersion = versionSelection.value;
 
     /** @type {{
      * loader: {name: string, separator: string, build: number, maven: string, version: string, stable: boolean},
      * mappings: {gameVersion: string, name: string, separator: string, build: number, maven: string, version: string, stable: boolean}
      * }[]} */
-    let data = await getJSON(`https://meta.legacyfabric.net/v1/versions/loader/${version}`);
+    let data = await getJSON(`https://meta.legacyfabric.net/v1/versions/loader/${mcVersion}`);
 
     let latest = data[0];
     let codeBlocks = document.getElementsByName('code');
@@ -57,11 +57,14 @@ async function loadData() {
     const versionUrl = 'https://maven.legacyfabric.net/net/legacyfabric/legacy-fabric-api/legacy-fabric-api/maven-metadata.xml';
     const mavenStr = 'net.legacyfabric.legacy-fabric-api:legacy-fabric-api:';
 
-    // TODO: fix api version
-    //let apiData = await getXML(versionUrl);
+    let apiData = await getXML(versionUrl);
+    let apiVersions = Object.entries(apiData.querySelectorAll('version'))
+        .map(([key, value]) => value.innerHTML)
+        .filter((v) => v.split('+')?.[1] == mcVersion);
+    let apiLatest = apiVersions.at(-1);
 
     for (let block of codeBlocks) {
-        //block.innerHTML = block.innerHTML.replaceAll('{fabric_version}', version);
+        block.innerHTML = block.innerHTML.replaceAll('{fabric_version}', apiLatest);
         block.innerHTML = block.innerHTML.replaceAll('{fabric_maven}', mavenStr);
     }
 }
@@ -69,7 +72,7 @@ async function loadData() {
 /**
  * @see https://stackoverflow.com/a/48969580
  * @param {string} url
- * @returns {Promise<*>}
+ * @returns {Promise<Document>}
  */
 function getXML(url) {
     return new Promise(function (resolve, reject) {
@@ -81,18 +84,12 @@ function getXML(url) {
                 resolve(xml);
             } else {
                 console.log('Something went wrong: ' + this.status);
-                reject({
-                    status: this.status,
-                    statusText: xhr.statusText
-                });
+                reject();
             }
         };
         xhr.onerror = function () {
             console.log('Something went wrong: ' + this.status);
-            reject({
-                status: this.status,
-                statusText: xhr.statusText
-            });
+            reject();
         };
 
         // get around caching issues
@@ -118,18 +115,12 @@ function getJSON(url) {
                 resolve(xhr.response);
             } else {
                 console.log('Something went wrong: ' + this.status);
-                reject({
-                    status: this.status,
-                    statusText: xhr.statusText
-                });
+                reject();
             }
         };
         xhr.onerror = function () {
             console.log('Something went wrong: ' + this.status);
-            reject({
-                status: this.status,
-                statusText: xhr.statusText
-            });
+            reject();
         };
         xhr.send();
     });
