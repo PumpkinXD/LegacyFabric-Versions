@@ -64,7 +64,7 @@ async function loadData() {
     let apiVersions = Object.entries(apiData.querySelectorAll('version'))
         .map(([key, value]) => value.innerHTML)
         .filter((v) => v.split('+')?.[1] == mcVersion);
-    let apiLatest = apiVersions.at(-1);
+    let apiLatest = apiVersions[apiVersions.length - 1];
 
     for (let block of codeBlocks) {
         block.innerHTML = block.innerHTML.replaceAll('{fabric_version}', apiLatest);
