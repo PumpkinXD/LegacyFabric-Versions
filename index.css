@@ -1,7 +1,20 @@
-html,
+html {
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+}
+
 body {
+    margin: clamp(10px, 1%, 20px);
+}
+
+body[data-theme='dark'] {
+    color-scheme: dark;
+    background-color: #34373b;
+    color: #e0e0e0;
+}
+
+body[data-theme='light'] {
+    color-scheme: light;
     background-color: #fafafa;
-    font-family: sans-serif;
 }
 
 #title {

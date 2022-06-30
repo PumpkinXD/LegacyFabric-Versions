@@ -1,6 +1,9 @@
 'use strict';
 
+import { getXML, getJSON } from './utils.js';
+
 const urlParams = new URLSearchParams(window.location.search);
+const pageInfoDiv = document.getElementById('page-info');
 const versionSelection = document.getElementById('versions');
 
 /** @type {{version: string, stable: boolean}[]} */
@@ -11,6 +14,18 @@ var mcVersions = [];
     String.prototype.replaceAll = function (search, replacement) {
         return this.replace(new RegExp(search, 'g'), replacement);
     };
+
+    if (urlParams.has('theme')) {
+        if (urlParams.get('theme') == 'legacy') {
+            pageInfoDiv.style.display = 'none';
+            document.body.setAttribute('data-theme', 'dark');
+        } else if (urlParams.get('theme') == 'dark') {
+            document.body.setAttribute('data-theme', 'dark');
+        }
+    } else {
+        let theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.body.setAttribute('data-theme', theme);
+    }
 
     console.log('Loading game version data...');
     mcVersions = await getJSON('https://meta.legacyfabric.net/v1/versions/game');
@@ -70,61 +85,4 @@ async function loadData() {
         block.innerHTML = block.innerHTML.replaceAll('{fabric_version}', apiLatest);
         block.innerHTML = block.innerHTML.replaceAll('{fabric_maven}', mavenStr);
     }
-}
-
-/**
- * @see https://stackoverflow.com/a/48969580
- * @param {string} url
- * @returns {Promise<Document>}
- */
-function getXML(url) {
-    return new Promise(function (resolve, reject) {
-        let xhr = new XMLHttpRequest();
-        xhr.onload = function () {
-            if (this.status >= 200 && this.status < 300) {
-                let parser = new DOMParser();
-                let xml = parser.parseFromString(xhr.responseText, 'text/xml');
-                resolve(xml);
-            } else {
-                console.log('Something went wrong: ' + this.status);
-                reject();
-            }
-        };
-        xhr.onerror = function () {
-            console.log('Something went wrong: ' + this.status);
-            reject();
-        };
-
-        // get around caching issues
-        url += '?t=' + new Date().getTime();
-
-        xhr.open('GET', url, true);
-        xhr.send();
-    });
-}
-
-/**
- * @see https://stackoverflow.com/a/48969580
- * @param {string} url
- * @returns {Promise<*>}
- */
-function getJSON(url) {
-    return new Promise(function (resolve, reject) {
-        let xhr = new XMLHttpRequest();
-        xhr.open('GET', url, true);
-        xhr.responseType = 'json';
-        xhr.onload = function () {
-            if (this.status >= 200 && this.status < 300) {
-                resolve(xhr.response);
-            } else {
-                console.log('Something went wrong: ' + this.status);
-                reject();
-            }
-        };
-        xhr.onerror = function () {
-            console.log('Something went wrong: ' + this.status);
-            reject();
-        };
-        xhr.send();
-    });
 }
