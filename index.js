@@ -27,6 +27,16 @@ var mcVersions = [];
         document.body.setAttribute('data-theme', theme);
     }
 
+    let link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    if (document.body.getAttribute('data-theme') == 'dark') {
+        link.href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/github-dark-dimmed.min.css';
+    } else {
+        link.href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/default.min.css';
+    }
+    document.head.appendChild(link);
+
     console.log('Loading game version data...');
     mcVersions = await getJSON('https://meta.legacyfabric.net/v1/versions/game');
     await initVersionSelect();
