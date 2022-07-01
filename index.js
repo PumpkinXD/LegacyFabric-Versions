@@ -39,11 +39,11 @@ var mcVersions = [];
 
     console.log('Loading game version data...');
     mcVersions = await getJSON('https://meta.legacyfabric.net/v1/versions/game');
-    await initVersionSelect();
+    await initVersionSelection();
     await loadData();
 })();
 
-function initVersionSelect() {
+function initVersionSelection() {
     for (let version of mcVersions) {
         let option = document.createElement('option');
         option.text = version.version;
@@ -83,13 +83,22 @@ async function loadData() {
 
     const versionUrl = 'https://maven.legacyfabric.net/net/legacyfabric/legacy-fabric-api/legacy-fabric-api/maven-metadata.xml';
     const mavenStr = 'net.legacyfabric.legacy-fabric-api:legacy-fabric-api:';
+    let apiLatest = undefined;
 
     console.log('Loading api version data...');
-    let apiData = await getXML(versionUrl);
-    let apiVersions = Object.entries(apiData.querySelectorAll('version'))
-        .map(([key, value]) => value.innerHTML)
-        .filter((v) => v.split('+')?.[1] == mcVersion);
-    let apiLatest = apiVersions[apiVersions.length - 1];
+    try {
+        let apiData = await getXML(versionUrl);
+        let apiVersions = Object.entries(apiData.querySelectorAll('version'))
+            .map(([key, value]) => value.innerHTML)
+            .filter((v) => v.split('+')?.[1] == mcVersion);
+        apiLatest = apiVersions[apiVersions.length - 1];
+    } catch (error) {
+        // fallback if maven request fails
+        console.warn('Failed to load latest api version, using hardcoded fallback!');
+        if (mcVersion == '1.8.9') {
+            apiLatest = '1.6.0+1.8.9';
+        }
+    }
 
     for (let block of codeBlocks) {
         block.innerHTML = block.innerHTML.replaceAll('{fabric_version}', apiLatest);

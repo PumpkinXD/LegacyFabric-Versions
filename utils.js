@@ -12,12 +12,12 @@ export function getXML(url) {
                 let xml = parser.parseFromString(xhr.responseText, 'text/xml');
                 resolve(xml);
             } else {
-                console.log('Something went wrong: ' + this.status);
+                console.warn('Something went wrong: ' + this.status);
                 reject();
             }
         };
         xhr.onerror = function () {
-            console.log('Something went wrong: ' + this.status);
+            console.warn('Something went wrong: ' + this.status);
             reject();
         };
 
@@ -43,12 +43,12 @@ export function getJSON(url) {
             if (this.status >= 200 && this.status < 300) {
                 resolve(xhr.response);
             } else {
-                console.log('Something went wrong: ' + this.status);
+                console.warn('Something went wrong: ' + this.status);
                 reject();
             }
         };
         xhr.onerror = function () {
-            console.log('Something went wrong: ' + this.status);
+            console.warn('Something went wrong: ' + this.status);
             reject();
         };
         xhr.send();
