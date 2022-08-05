@@ -95,8 +95,8 @@ async function loadData() {
     } catch (error) {
         // fallback if maven request fails
         console.warn('Failed to load latest api version, using hardcoded fallback!');
-        if (mcVersion == '1.8.9') {
-            apiLatest = '1.6.0+1.8.9';
+        if (['1.12.2', '1.11.2', '1.10.2', '1.9.4', '1.8.9', '1.8', '1.7.10'].includes(mcVersion)) {
+            apiLatest = `1.7.0+${mcVersion}`;
         }
     }
 
