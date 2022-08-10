@@ -1,6 +1,6 @@
 'use strict';
 
-import { getXML, getJSON } from './utils.js';
+import { getHtml, getJson } from './request.js';
 
 const urlParams = new URLSearchParams(window.location.search);
 const pageInfoDiv = document.getElementById('page-info');
@@ -38,7 +38,7 @@ var mcVersions = [];
     document.head.appendChild(link);
 
     console.log('Loading game version data...');
-    mcVersions = await getJSON('https://meta.legacyfabric.net/v1/versions/game');
+    mcVersions = await getJson('https://meta.legacyfabric.net/v1/versions/game');
     await initVersionSelection();
     await loadData();
 })();
@@ -71,7 +71,7 @@ async function loadData() {
      * loader: {name: string, separator: string, build: number, maven: string, version: string, stable: boolean},
      * mappings: {gameVersion: string, name: string, separator: string, build: number, maven: string, version: string, stable: boolean}
      * }[]} */
-    let data = await getJSON(`https://meta.legacyfabric.net/v1/versions/loader/${mcVersion}`);
+    let data = await getJson(`https://meta.legacyfabric.net/v1/versions/loader/${mcVersion}`);
 
     let latest = data[0];
     let codeBlocks = document.getElementsByName('code');
@@ -81,15 +81,15 @@ async function loadData() {
         block.innerHTML = block.innerHTML.replaceAll('{loader_version}', latest.loader.version);
     }
 
-    const versionUrl = 'https://maven.legacyfabric.net/net/legacyfabric/legacy-fabric-api/legacy-fabric-api/maven-metadata.xml';
+    const versionUrl = 'https://maven.legacyfabric.net/net/legacyfabric/legacy-fabric-api/legacy-fabric-api/';
     const mavenStr = 'net.legacyfabric.legacy-fabric-api:legacy-fabric-api:';
     let apiLatest = undefined;
 
     console.log('Loading api version data...');
     try {
-        let apiData = await getXML(versionUrl);
-        let apiVersions = Object.entries(apiData.querySelectorAll('version'))
-            .map(([key, value]) => value.innerHTML)
+        let apiData = await getHtml(versionUrl);
+        let apiVersions = Object.entries(apiData.querySelectorAll('a'))
+            .map(([key, value]) => value.innerHTML.slice(0, -1))
             .filter((v) => v.split('+')?.[1] == mcVersion);
         apiLatest = apiVersions[apiVersions.length - 1];
     } catch (error) {
