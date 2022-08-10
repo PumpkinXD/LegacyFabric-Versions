@@ -10,11 +10,6 @@ const versionSelection = document.getElementById('versions');
 var mcVersions = [];
 
 (async () => {
-    // taken from https://stackoverflow.com/a/1144788
-    String.prototype.replaceAll = function (search, replacement) {
-        return this.replace(new RegExp(search, 'g'), replacement);
-    };
-
     if (urlParams.has('theme')) {
         if (urlParams.get('theme') == 'legacy') {
             pageInfoDiv.style.display = 'none';
@@ -76,9 +71,9 @@ async function loadData() {
     let latest = data[0];
     let codeBlocks = document.getElementsByName('code');
     for (let block of codeBlocks) {
-        block.innerHTML = block.innerHTML.replaceAll('{minecraft_version}', latest.mappings.gameVersion);
-        block.innerHTML = block.innerHTML.replaceAll('{yarn_version}', latest.mappings.version);
-        block.innerHTML = block.innerHTML.replaceAll('{loader_version}', latest.loader.version);
+        block.innerHTML = block.innerHTML.replace('{minecraft_version}', latest.mappings.gameVersion);
+        block.innerHTML = block.innerHTML.replace('{yarn_version}', latest.mappings.version);
+        block.innerHTML = block.innerHTML.replace('{loader_version}', latest.loader.version);
     }
 
     const versionUrl = 'https://maven.legacyfabric.net/net/legacyfabric/legacy-fabric-api/legacy-fabric-api/';
@@ -101,7 +96,7 @@ async function loadData() {
     }
 
     for (let block of codeBlocks) {
-        block.innerHTML = block.innerHTML.replaceAll('{fabric_version}', apiLatest);
-        block.innerHTML = block.innerHTML.replaceAll('{fabric_maven}', mavenStr);
+        block.innerHTML = block.innerHTML.replace('{fabric_version}', apiLatest);
+        block.innerHTML = block.innerHTML.replace('{fabric_maven}', mavenStr);
     }
 }
