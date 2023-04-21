@@ -76,22 +76,22 @@ async function loadData() {
         block.innerHTML = block.innerHTML.replace('{loader_version}', latest.loader.version);
     }
 
-    const versionUrl = 'https://maven.legacyfabric.net/net/legacyfabric/legacy-fabric-api/legacy-fabric-api/';
+    const versionUrl = 'https://api.modrinth.com/v2/project/legacy-fabric-api/version';
     const mavenStr = 'net.legacyfabric.legacy-fabric-api:legacy-fabric-api:';
     let apiLatest = undefined;
 
     console.log('Loading api version data...');
     try {
-        let apiData = await getHtml(versionUrl);
-        let apiVersions = Object.entries(apiData.querySelectorAll('a'))
-            .map(([key, value]) => value.innerHTML.slice(0, -1))
-            .filter((v) => v.split('+')?.[1] == mcVersion);
-        apiLatest = apiVersions[apiVersions.length - 1];
+        let apiData = await getJson(versionUrl);
+        let apiVersions = apiData.map((el) => el.version_number);
+        console.log('Found these api versions:', apiVersions);
+        apiLatest = apiVersions[0];
     } catch (error) {
         // fallback if maven request fails
+        console.error(error);
         console.warn('Failed to load latest api version, using hardcoded fallback!');
         if (['1.12.2', '1.11.2', '1.10.2', '1.9.4', '1.8.9', '1.8', '1.7.10'].includes(mcVersion)) {
-            apiLatest = `1.7.0+${mcVersion}`;
+            apiLatest = `1.9.0+${mcVersion}`;
         }
     }
 
