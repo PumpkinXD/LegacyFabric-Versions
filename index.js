@@ -85,7 +85,7 @@ async function loadData() {
         let apiData = await getJson(versionUrl);
         let apiVersions = apiData.map((el) => el.version_number);
         console.log('Found these api versions:', apiVersions);
-        apiLatest = apiVersions[0];
+        apiLatest = `${apiVersions[0]}+${mcVersion}`;
     } catch (error) {
         // fallback if maven request fails
         console.error(error);
