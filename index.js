@@ -91,7 +91,7 @@ async function loadData() {
         console.error(error);
         console.warn('Failed to load latest api version, using hardcoded fallback!');
         if (['1.12.2', '1.11.2', '1.10.2', '1.9.4', '1.8.9', '1.8', '1.7.10'].includes(mcVersion)) {
-            apiLatest = `1.9.0+${mcVersion}`;
+            apiLatest = `1.9.1+${mcVersion}`;
         }
     }
 
